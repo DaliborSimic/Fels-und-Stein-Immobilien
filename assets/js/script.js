@@ -48,4 +48,34 @@ const header = document.querySelector("[data-header]");
 window.addEventListener("scroll", function () {
   window.scrollY >= 400 ? header.classList.add("active")
     : header.classList.remove("active");
-}); 
+});
+
+
+
+/**
+ * FAQ accordion
+ */
+
+const accordions = document.querySelectorAll("[data-accordion]");
+
+accordions.forEach((accordion) => {
+  const btn = accordion.querySelector("[data-accordion-btn]");
+  const content = accordion.querySelector("[data-accordion-content]");
+
+  if (!btn || !content) return;
+
+  btn.addEventListener("click", () => {
+    const isOpen = accordion.classList.contains("active");
+
+    accordions.forEach((item) => {
+      item.classList.remove("active");
+      const itemBtn = item.querySelector("[data-accordion-btn]");
+      if (itemBtn) itemBtn.setAttribute("aria-expanded", "false");
+    });
+
+    if (!isOpen) {
+      accordion.classList.add("active");
+      btn.setAttribute("aria-expanded", "true");
+    }
+  });
+});
