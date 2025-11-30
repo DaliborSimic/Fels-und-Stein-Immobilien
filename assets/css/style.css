@@ -434,7 +434,7 @@ button, a { transition: var(--transition); }
 
 .header-bottom-actions-btn span {
   color: var(--cadet);
-  font-family: var(--ff-poppins);
+  font-family: var(--ff-nunito-sans);
   font-size: var(--fs-7);
   font-weight: var(--fw-500);
 }
