@@ -113,7 +113,7 @@ address { font-style: normal; }
 ion-icon { pointer-events: none; }
 
 html {
-  font-family: var(--ff-nunito-sans);
+  font-family: var(--ff-poppins);
   scroll-behavior: smooth;
 }
 
@@ -1014,7 +1014,7 @@ button, a { transition: var(--transition); }
   padding: 18px 22px;
   color: var(--dark-jungle-green);
   font-family: var(--ff-poppins);
-  font-size: var(--fs-4);
+  font-size: var(--fs-5);
   font-weight: var(--fw-500);
   line-height: 1.4;
 }
