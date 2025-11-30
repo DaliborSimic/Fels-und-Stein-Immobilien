@@ -1,37 +1,42 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const includeElements = document.querySelectorAll("[data-include]");
-  const fetches = [];
+// includes.js
+// Lädt HTML-Partials anhand des Attributs data-include
+// Funktioniert auch rekursiv (Partials können wieder Partials enthalten)
 
-  includeElements.forEach(function (el) {
-    const file = el.getAttribute("data-include");
-    if (!file) return;
+async function loadPartials(rootElement) {
+  const root = rootElement || document;
+  const includeElements = root.querySelectorAll("[data-include]");
 
-    const p = fetch(file)
-      .then(function (response) {
+  const tasks = [];
+
+  includeElements.forEach((el) => {
+    const url = el.getAttribute("data-include");
+    if (!url) return;
+
+    const task = fetch(url)
+      .then((response) => {
         if (!response.ok) {
-          throw new Error("Konnte Datei nicht laden: " + file);
+          throw new Error("Fehler beim Laden von " + url);
         }
         return response.text();
       })
-      .then(function (html) {
+      .then((html) => {
+        el.removeAttribute("data-include"); // damit wir nicht doppelt laden
         el.innerHTML = html;
+
+        // Rekursiv: neu eingefügte Inhalte auch prüfen
+        return loadPartials(el);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.error(error);
-        el.innerHTML = "<!-- Fehler beim Laden von " + file + " -->";
+        el.innerHTML = "<!-- Fehler beim Laden von " + url + " -->";
       });
 
-    fetches.push(p);
+    tasks.push(task);
   });
 
-  // Wenn alle Partials geladen sind, dann dein ursprüngliches script.js nachladen
-  Promise.all(fetches)
-    .then(function () {
-      const script = document.createElement("script");
-      script.src = "./assets/js/script.js";
-      document.body.appendChild(script);
-    })
-    .catch(function (error) {
-      console.error("Fehler beim Laden der Partials:", error);
-    });
+  return Promise.all(tasks);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  loadPartials();
 });
