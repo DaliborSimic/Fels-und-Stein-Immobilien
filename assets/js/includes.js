@@ -38,5 +38,17 @@ async function loadPartials(rootElement) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  loadPartials();
+  loadPartials()
+    .then(() => {
+      const existingScript = document.querySelector('[data-app-script="main"]');
+      if (existingScript) return;
+
+      const script = document.createElement("script");
+      script.src = "./assets/js/script.js";
+      script.dataset.appScript = "main";
+      document.body.appendChild(script);
+    })
+    .catch((error) => {
+      console.error("Fehler beim Laden der Partials:", error);
+    });
 });
